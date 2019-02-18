@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "TransactionAnalysis-交易量分析";
+}
+
+<link href="~/Content/search.css" rel="stylesheet" />
+<table class="tab">
+    <tr>
+        <td>
+           <div class="st">开始日期:</div> 
+        </td>
+        <td>
+            <select id="STyear">
+                
+                @for (int i = DateTime.Now.Year; i >= ViewBag.minyear; i--)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <span class="span">年</span>
+            <select id="STmonth">
+                 <option>@DateTime.Today.Month</option>
+                @for (int j = 1; j <= 12; j++)
+                {
+                    <option>@j</option>
+                }
+            </select>
+            <span class="span">
+                月&emsp;
+            </span>
+        </td>
+
+        <td><div class="st">结束日期:</div></td>
+        <td>
+
+            <select id="ETyear">
+                
+                @for (int k = DateTime.Now.Year; k >= ViewBag.minyear; k--)
+                {
+                    <option>@k</option>
+                }
+            </select>
+            <span class="span">年</span>
+            <select id="ETmonth">
+                 <option>@DateTime.Today.Month</option>
+                @for (int p = 1; p <= 12; p++)
+                {
+                    <option>@p</option>
+                }
+            </select>
+            <span class="span">
+                月
+            </span>
+        </td>
+        <td>
+            @Html.DevExpress().Button(m =>
+                      {
+                          m.Name = "btn";
+                          m.Text = "查询";
+                          m.ClientSideEvents.Click = "function(){setParameterValues();}";
+                      }).GetHtml()
+        </td>
+    </tr>
+</table>
+
+@Html.DevExpress().Dashboard(settings =>
+{
+
+    settings.Name = "dashboard2";
+    settings.WorkingMode = DevExpress.DashboardWeb.WorkingMode.ViewerOnly;
+    settings.InitialDashboardId = "dashboard2";
+ settings.ClientSideEvents.DashboardEndUpdate = "function() { setParameterValues(); }";
+settings.ClientSideEvents.ItemClick = "function() { setParameterValues(); }";
+
+}).GetHtml()
+
+<script>
+    function setParameterValues() {
+
+
+        var STyear = $("#STyear").val();
+        var STmonth = $("#STmonth").val();
+        var ETyear = $("#ETyear").val();
+        var ETmonth = $("#ETmonth").val();
+        var parameters = dashboard2.GetParameters();
+        var SJ1 = parameters.GetParameterByName("SJ1"),
+            SJ2 = parameters.GetParameterByName("SJ2");
+        //var newnew_date = new Date(sj4_year, sj4_month, 1);        //取当年当月中的第一天
+        //var lastday = (new Date(sj4_year, sj4_month ,0)).getDate();//获取当月最后一天日期
+        if (STmonth < 10) {
+            STmonth = "0" + STmonth;
+        }
+        if (ETmonth < 10) {
+            STmonth = "0" + STmonth;
+        }
+        SJ1.SetValue("" + STyear + "-" + STmonth + "");
+        SJ2.SetValue("" + ETyear + "-" + ETmonth + "");
+        
+    }
+</script>

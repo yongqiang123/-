@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "PriceLine";
+
+}
+<link href="~/Content/search.css" rel="stylesheet" />
+<div >
+<table style="margin-left:20%;">
+    <tr>
+        <td>
+            <div class="sp">
+            开始日期:
+           </div>
+        </td>
+        <td>
+            @Html.DevExpress().DateEdit(m =>
+       {
+           m.Name = "StartTime";
+           m.Date = Convert.ToDateTime(ViewData["ST"]);
+
+       }).GetHtml()
+
+        </td>
+        <td><div class="sp">结束日期:</div></td>
+        <td>
+
+            @Html.DevExpress().DateEdit(m =>
+       {
+           m.Name = "EndTime";
+           m.Date = DateTime.Today;
+       }).GetHtml()
+
+        </td>
+        <td>
+            @Html.DevExpress().Button(m =>
+            {
+                m.Name = "btn";
+                m.Text = "查询";
+                m.ClientSideEvents.Click = "function(){setParameterValues();}";
+            }).GetHtml()
+        </td>
+    </tr>
+</table>
+  </div> 
+@Html.DevExpress().Dashboard(settings => {
+    
+    settings.Name = "Dashboard3";
+    settings.WorkingMode = DevExpress.DashboardWeb.WorkingMode.ViewerOnly;
+    settings.InitialDashboardId = "dashboard3";
+   // settings.ClientSideEvents.DashboardEndUpdate = "function() { setParameterValues(); }";
+    settings.ClientSideEvents.ItemClick="function() { setParameterValues(); }";
+     settings.ClientSideEvents.DashboardEndUpdate = "function() { setParameterValues(); }";
+}).GetHtml()
+
+
+ <script>
+    window.onload = setParameterValues;
+
+        function setParameterValues() {
+
+            var stime = StartTime.GetValue();
+            var etime = EndTime.GetValue();
+            var sj1_year = stime.getFullYear();
+            var sj1_month = stime.getMonth() + 1
+            var sj1_day = stime.getDate();
+             var sj2_year = etime.getFullYear();
+             var sj2_month = etime.getMonth() + 1;
+            var sj2_day = etime.getDate();
+            var parameters = Dashboard3.GetParameters();
+            var SJ1 = parameters.GetParameterByName("SJ1"),
+                SJ2 = parameters.GetParameterByName("SJ2");
+            SJ1.SetValue("" + sj1_year + "-" + sj1_month + "-" + sj1_day + "");
+            SJ2.SetValue("" + sj2_year + "-" + sj2_month + "-" + sj2_day + "");
+            //alert(SJ1.GetValue());
+            //alert(SJ2.GetValue());
+     }
+
+
+    </script>

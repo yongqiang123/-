@@ -1,0 +1,84 @@
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "GridView";
+        settings.CallbackRouteValues = new { Controller = "Manage", Action = "GridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Manage", Action = "GridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Manage", Action = "GridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Manage", Action = "GridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "TradeID";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.CommandColumn.VisibleIndex = 14;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+
+        //settings.Columns.Add("TradeID");
+        //settings.Columns.Add("TradeDate");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "TradeDate";
+
+            column.EditorProperties().DateEdit(p =>
+            {
+
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ProductID";
+
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "ProductName";
+                p.ValueField = "ProductID";
+                p.ValueType = typeof(int);
+                p.DataSource = ViewData["T_Product"];
+            });
+        });
+        //settings.Columns.Add("TradeMonth");
+        //settings.Columns.Add("TradeYear");
+        //settings.Columns.Add("TradeYearMon");
+        //settings.Columns.Add("CustomerID");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CustomerID";
+
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "CustomerName";
+                p.ValueField = "CustomerID";
+                p.ValueType = typeof(int);
+                p.DataSource = ViewData["T_Customer"];
+            });
+        });
+        settings.Columns.Add("MinPrice");
+        settings.Columns.Add("MaxPrice");
+        settings.Columns.Add("avgPrice");
+        settings.Columns.Add("TradeAmount");
+        settings.Columns.Add("TradeMoney");
+        settings.Columns.Add("TradeUnit");
+        settings.Columns.Add("TradeFee");
+
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

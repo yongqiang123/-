@@ -1,0 +1,74 @@
+@{
+    var treeList = Html.DevExpress().TreeList(settings => {
+        settings.Name = "TreeList";
+        settings.CallbackRouteValues = new { Controller = "Manage", Action = "TreeListPartial" };
+
+        settings.SettingsEditing.AddNewNodeRouteValues = new { Controller = "Manage", Action = "TreeListPartialAddNew" };
+        settings.SettingsEditing.UpdateNodeRouteValues = new { Controller = "Manage", Action = "TreeListPartialUpdate" };
+        settings.SettingsEditing.DeleteNodeRouteValues = new { Controller = "Manage", Action = "TreeListPartialDelete" };
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.NewButton.Visible = false;
+        settings.CommandColumn.DeleteButton.Visible = true;
+        settings.CommandColumn.EditButton.Visible = true;
+        settings.CommandColumn.VisibleIndex = 10;
+        // settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.Width = Unit.Percentage(40);
+
+
+        settings.KeyFieldName = "CustomerDepID";
+        settings.ParentFieldName = "ParentDep";
+        settings.Columns.Add(
+            column => {
+                column.FieldName = "CustomerDepName";
+            }
+
+            );
+        //if (Convert.ToInt32(Session["CustomerID"]) == 0)
+        //{
+        //    settings.CommandColumn.ShowNewButtonInHeader = true;
+        //    settings.CommandColumn.NewButton.Visible = false;
+        //    settings.Columns.Add(column =>
+        //    {
+        //        column.FieldName = "CustomerID";
+
+        //        column.EditorProperties().ComboBox(p =>
+        //        {
+        //            p.TextField = "CustomerDepName";
+        //            p.ValueField = "CustomerID";
+        //            p.ValueType = typeof(int);
+        //            p.DataSource = ViewData["CustomerDepName"];
+        //        });
+        //    });
+        //}
+        //else
+        //{
+
+        //    settings.CommandColumn.ShowNewButtonInHeader = false;
+        //    settings.CommandColumn.NewButton.Visible = true;
+
+
+
+        //    //settings.Columns.Add(column =>
+        //    //{
+        //    //    column.FieldName = "CustomerID";
+
+        //    //    column.EditorProperties().ComboBox(p =>
+        //    //    {
+        //    //        p.TextField = "CustomerName";
+        //    //        p.ValueField = "CustomerID";
+        //    //        p.ValueType = typeof(int);
+        //    //        p.DataSource = ViewData["Customer"];
+        //    //    });
+        //    //});
+        //}
+         settings.ClientSideEvents.SelectionChanged = "function(s,e){OnClick(s,e);}";//复选框点击事件
+        settings.SettingsPager.Visible = false;
+        settings.SettingsSelection.Enabled = true;
+        settings.SettingsBehavior.AutoExpandAllNodes = true;//自动展开节点
+    });
+    if (ViewData["EditError"] != null) {
+        treeList.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@treeList.Bind(Model).GetHtml()

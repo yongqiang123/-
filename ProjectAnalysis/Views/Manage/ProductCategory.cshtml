@@ -1,0 +1,126 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ProductCategory</title>
+     @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList }
+    )
+    @Html.DevExpress().GetScripts( 
+        new Script { ExtensionSuite = ExtensionSuite.TreeList }
+    )
+    <style>
+        .d{
+        display:inline;
+         float:left;
+        }
+       
+    </style>
+</head>
+<body>
+  
+    <div class="d">
+    @Html.Action("PcategoryTreeListPartial")
+</div>
+    <div class="d" style="margin:10px 50px;">
+        @using (Html.BeginForm("PcategoryTreeListPartialAddNew", "Manage", FormMethod.Post))
+        {
+
+            @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "RoundPanel";
+           settings.HeaderText = "新增";
+           settings.ShowHeader = true;
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write("<table style=\"line-height:30px;\"><tr>");
+               ViewContext.Writer.Write(" <td>商品名称:*</td><td>");
+               @Html.DevExpress().TextBox(m =>
+               {
+                   m.Name = "PdCategoryName";
+                   m.ShowModelErrors = true;  
+                   m.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+                    m.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                    m.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+                  
+               }).GetHtml();
+               ViewContext.Writer.Write("</td></tr><tr><td>父级id:</td><td><input type=\"text\" name=\"partid\" class=\"txtpartid\" readonly /></td></tr>");
+               ViewContext.Writer.Write("<tr>");
+               ViewContext.Writer.Write("<td>编码:*</td> <td>");
+               @Html.DevExpress().TextBox(m =>
+               {
+                   m.Name = "pdCategoryCode";
+                    m.ShowModelErrors = true;  
+                   m.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithText;
+                    m.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                    m.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+               }).GetHtml();
+               ViewContext.Writer.Write("</td></tr>");
+               ViewContext.Writer.Write("<tr><td></td><td>");
+               
+                @Html.DevExpress().Button(m => {
+                    m.Name = "btn";
+                    m.Text = "提交";
+                    m.UseSubmitBehavior = true;
+                }).GetHtml();
+               ViewContext.Writer.Write("</td></tr></table>");
+           });
+       }).GetHtml()
+
+
+            @*<table style="line-height:30px;">
+        <tr>
+            <td>商品名称:</td>
+            <td>
+                @Html.DevExpress().TextBox(m =>
+           {
+               m.Name = "PdCategoryName";
+           }).GetHtml()
+            </td>
+        </tr>
+        <tr>
+            <td>父级id:</td>
+            <td><input type="text" name="partid" class="txtpartid" readonly /></td>
+        </tr>
+        <tr>
+            <td>编码:</td>
+            <td>
+                @Html.DevExpress().TextBox(m =>
+           {
+               m.Name = "pdCategoryCode";
+           }).GetHtml()
+            </td>
+        </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.DevExpress().Button(m=> {
+                       m.Name = "btn";
+                       m.Text = "提交";
+                       m.UseSubmitBehavior = true;
+                   }).GetHtml()
+
+                    </td>
+                </tr>
+    </table>*@
+        }
+
+    
+    
+    </div>
+</body>
+</html>
+<script>
+     function OnClick(s, e) {
+        var selectedIDsArray = PcategoryTreeList.GetVisibleSelectedNodeKeys(e); // Treemenu是treelist的Name名称
+        selectedIDs = selectedIDsArray.join(',');
+       $(".txtpartid").val(selectedIDs)
+    }
+
+</script>

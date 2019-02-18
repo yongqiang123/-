@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="交易数据同比分析" />
+  <DataSources>
+    <SqlDataSource Name="SQL Data Source" ComponentName="sqlDataSource1">
+      <Connection Name="DefaultConnection" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="交易数据同比分析">
+        <Parameter Name="SJ1" Type="DevExpress.DataAccess.Expression">(System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.SJ1])</Parameter>
+        <Parameter Name="SJ2" Type="DevExpress.DataAccess.Expression">(System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.SJ2])</Parameter>
+        <Parameter Name="SJ3" Type="DevExpress.DataAccess.Expression">(System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.SJ3])</Parameter>
+        <Tables>
+          <Table Name="T_Product" />
+          <Table Name="T_ProductCategory" />
+          <Table Name="T_ProductTradeDaySummary" />
+          <Relation Type="Inner" Parent="T_Product" Nested="T_ProductCategory">
+            <KeyColumn Parent="pdCatetoryID" Nested="pdCatetoryID" />
+          </Relation>
+          <Relation Type="Inner" Parent="T_ProductTradeDaySummary" Nested="T_Product">
+            <KeyColumn Parent="ProductID" Nested="ProductID" />
+          </Relation>
+        </Tables>
+        <Columns>
+          <Column Table="T_Product" Name="ProductName" />
+          <Column Table="T_ProductCategory" Name="PdCategoryName" />
+          <Column Table="T_ProductTradeDaySummary" Name="MinPrice" Aggregate="Min" Alias="MinPrice_Min" />
+          <Column Table="T_ProductTradeDaySummary" Name="MaxPrice" Aggregate="Max" Alias="MaxPrice_Max" />
+          <Column Table="T_ProductTradeDaySummary" Name="avgPrice" Aggregate="Avg" Alias="avgPrice_Avg" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeAmount" Aggregate="Sum" Alias="TradeAmount_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeMoney" Aggregate="Sum" Alias="TradeMoney_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeFee" Aggregate="Sum" Alias="TradeFee_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeYear" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeMonth" />
+        </Columns>
+        <Grouping>
+          <Column Table="T_Product" Name="ProductName" />
+          <Column Table="T_ProductCategory" Name="PdCategoryName" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeYear" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeMonth" />
+        </Grouping>
+        <Filter>[T_ProductTradeDaySummary.TradeYear] &gt;= ?SJ1 And [T_ProductTradeDaySummary.TradeYear] &lt;= ?SJ2 And [T_ProductTradeDaySummary.TradeMonth] = ?SJ3</Filter>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="SJ1" Type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="2015" Description="TradeDate" />
+    <Parameter Name="SJ2" Type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="2018" Description="TradeDate" />
+    <Parameter Name="SJ3" Type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="10" />
+  </Parameters>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="成交量同比分析" ShowCaption="false" DataSource="sqlDataSource1" DataMember="交易数据同比分析">
+      <InteractivityOptions MasterFilterMode="Single" />
+      <DataItems>
+        <Dimension DataMember="PdCategoryName" DefaultId="DataItem0" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="类别名称">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <Grid ComponentName="gridDashboardItem2" Name="Grid 2" ShowCaption="false" DataSource="sqlDataSource1" DataMember="交易数据同比分析">
+      <DataItems>
+        <Dimension DataMember="PdCategoryName" DefaultId="DataItem0" />
+        <Dimension DataMember="ProductName" DefaultId="DataItem1" />
+        <Dimension DataMember="TradeYear" DefaultId="DataItem2">
+          <NumericFormat FormatType="General" Unit="Ones" />
+        </Dimension>
+        <Dimension DataMember="TradeMonth" DefaultId="DataItem3" />
+        <Dimension DataMember="MinPrice_Min" DefaultId="DataItem5">
+          <NumericFormat FormatType="Currency" />
+        </Dimension>
+        <Dimension DataMember="MaxPrice_Max" DefaultId="DataItem4">
+          <NumericFormat FormatType="Currency" Unit="Ones" />
+        </Dimension>
+        <Measure DataMember="avgPrice_Avg" DefaultId="DataItem6">
+          <NumericFormat FormatType="Currency" />
+        </Measure>
+        <Measure DataMember="TradeAmount_Sum" DefaultId="DataItem7">
+          <NumericFormat FormatType="General" Unit="Ones" />
+        </Measure>
+        <Measure DataMember="TradeMoney_Sum" DefaultId="DataItem8">
+          <NumericFormat FormatType="General" />
+        </Measure>
+        <Measure DataMember="TradeFee_Sum" DefaultId="DataItem9">
+          <NumericFormat FormatType="General" />
+        </Measure>
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="产品类别">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="产品名称">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="年份">
+          <Dimension DefaultId="DataItem2" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="月份">
+          <Dimension DefaultId="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="最高价">
+          <Dimension DefaultId="DataItem4" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="最低价">
+          <Dimension DefaultId="DataItem5" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="平均价">
+          <Measure DefaultId="DataItem6" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="成交量">
+          <Measure DefaultId="DataItem7" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="成交额">
+          <Measure DefaultId="DataItem8" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="交易费用">
+          <Measure DefaultId="DataItem9" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+    </Grid>
+    <Chart ComponentName="chartDashboardItem1" Name="成交量同比分析" DataSource="sqlDataSource1" DataMember="交易数据同比分析">
+      <DataItems>
+        <Measure DataMember="TradeAmount_Sum" DefaultId="DataItem0">
+          <NumericFormat FormatType="General" />
+        </Measure>
+        <Dimension DataMember="ProductName" DefaultId="DataItem2" />
+        <Dimension DataMember="TradeYear" DefaultId="DataItem1">
+          <NumericFormat FormatType="General" />
+        </Dimension>
+        <Dimension DataMember="TradeMonth" DefaultId="DataItem3" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem2" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem3" />
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple Name="成交量">
+              <Value DefaultId="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem2" Name="成交额同比分析" DataSource="sqlDataSource1" DataMember="交易数据同比分析">
+      <DataItems>
+        <Measure DataMember="TradeMoney_Sum" DefaultId="DataItem0" />
+        <Dimension DataMember="TradeMonth" DefaultId="DataItem1" />
+        <Dimension DataMember="TradeYear" Name="年份" DefaultId="DataItem2">
+          <NumericFormat FormatType="General" />
+        </Dimension>
+        <Dimension DataMember="ProductName" DefaultId="DataItem3" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem3" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple Name="成交额">
+              <Value DefaultId="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+    <Chart ComponentName="chartDashboardItem3" Name="平均价同比分析" DataSource="sqlDataSource1" DataMember="交易数据同比分析">
+      <DataItems>
+        <Dimension DataMember="TradeMonth" DefaultId="DataItem1" />
+        <Dimension DataMember="TradeYear" DefaultId="DataItem2">
+          <NumericFormat FormatType="General" />
+        </Dimension>
+        <Dimension DataMember="ProductName" DefaultId="DataItem3" />
+        <Measure DataMember="avgPrice_Avg" DefaultId="DataItem0" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem3" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+        <Argument DefaultId="DataItem2" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple Name="成交平均价格">
+              <Value DefaultId="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical" Weight="100">
+      <LayoutGroup Orientation="Vertical" Weight="100">
+        <LayoutGroup Weight="100">
+          <LayoutItem DashboardItem="gridDashboardItem1" Weight="18.840579710144929" />
+          <LayoutGroup Orientation="Vertical" Weight="181.15942028985506">
+            <LayoutItem DashboardItem="gridDashboardItem2" Weight="174.4750952903934" />
+            <LayoutGroup Weight="100">
+              <LayoutItem DashboardItem="chartDashboardItem1" Weight="100" />
+              <LayoutItem DashboardItem="chartDashboardItem2" Weight="100" />
+              <LayoutItem DashboardItem="chartDashboardItem3" Weight="100" />
+            </LayoutGroup>
+          </LayoutGroup>
+        </LayoutGroup>
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

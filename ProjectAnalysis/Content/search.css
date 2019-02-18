@@ -1,0 +1,46 @@
+﻿ .sp {
+    background: #FFB800;
+    cursor: pointer;
+    border-radius: 2px;
+    overflow: hidden;
+   width:80px;
+    line-height:32px;
+    text-align:center;
+    }
+.dxsplControl_Material {
+    border: 0px solid black;
+}
+ .st{
+    background: #FFB800;
+    cursor: pointer;
+    border-radius: 2px;
+    overflow: hidden;
+   width:80px;
+    line-height:32px;
+    text-align:center;
+    }
+.span {
+    background: #FFB800;
+    cursor: pointer;
+    border-radius: 2px;
+    overflow: hidden;
+   width:80px;
+   padding:10px;
+    text-align:center;
+}
+#STyear {
+     height:32px;
+}
+#STmonth {
+    height:32px;
+}
+#ETyear {
+     height:32px;
+}
+#ETmonth {
+    height:32px;
+}
+.tab {
+margin-left:20%;
+
+}

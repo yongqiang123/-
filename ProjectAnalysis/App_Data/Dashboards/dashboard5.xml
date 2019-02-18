@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="交易结构分析" />
+  <DataSources>
+    <SqlDataSource Name="SQL Data Source" ComponentName="sqlDataSource1">
+      <Connection Name="DefaultConnection" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="交易结构分析">
+        <Parameter Name="SJ1" Type="DevExpress.DataAccess.Expression">(System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.SJ1])</Parameter>
+        <Parameter Name="SJ2" Type="DevExpress.DataAccess.Expression">(System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.SJ2])</Parameter>
+        <Tables>
+          <Table Name="T_Product" />
+          <Table Name="T_ProductCategory" />
+          <Table Name="T_ProductTradeDaySummary" />
+          <Relation Type="Inner" Parent="T_Product" Nested="T_ProductCategory">
+            <KeyColumn Parent="pdCatetoryID" Nested="pdCatetoryID" />
+          </Relation>
+          <Relation Type="Inner" Parent="T_ProductTradeDaySummary" Nested="T_Product">
+            <KeyColumn Parent="ProductID" Nested="ProductID" />
+          </Relation>
+        </Tables>
+        <Columns>
+          <Column Table="T_Product" Name="ProductName" />
+          <Column Table="T_ProductCategory" Name="PdCategoryName" />
+          <Column Table="T_ProductTradeDaySummary" Name="MinPrice" Aggregate="Min" Alias="MinPrice_Min" />
+          <Column Table="T_ProductTradeDaySummary" Name="MaxPrice" Aggregate="Avg" Alias="MaxPrice_Avg" />
+          <Column Table="T_ProductTradeDaySummary" Name="avgPrice" Aggregate="Avg" Alias="avgPrice_Avg" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeAmount" Aggregate="Sum" Alias="TradeAmount_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeMoney" Aggregate="Sum" Alias="TradeMoney_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeFee" Aggregate="Sum" Alias="TradeFee_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeYearMon" />
+        </Columns>
+        <Grouping>
+          <Column Table="T_ProductCategory" Name="PdCategoryName" />
+          <Column Table="T_Product" Name="ProductName" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeYearMon" />
+        </Grouping>
+        <Filter>[T_ProductTradeDaySummary.TradeYearMon] &gt;= ?SJ1 And [T_ProductTradeDaySummary.TradeYearMon] &lt;= ?SJ2</Filter>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="SJ1" Value="'2018-01-01'" />
+    <Parameter Name="SJ2" Value="2018-12-31" />
+  </Parameters>
+  <Items>
+    <Pie ComponentName="pieDashboardItem1" Name="Pies 1" ShowCaption="false" DataSource="sqlDataSource1" DataMember="交易结构分析">
+      <DataItems>
+        <Measure DataMember="TradeMoney_Sum" Name="各类别成交额" DefaultId="DataItem0">
+          <NumericFormat FormatType="Currency" Unit="Ones" />
+        </Measure>
+        <Dimension DataMember="PdCategoryName" DefaultId="DataItem1" />
+        <Measure DataMember="TradeAmount_Sum" Name="各类别成交量" DefaultId="DataItem2" />
+      </DataItems>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Values>
+        <Value DefaultId="DataItem0" />
+        <Value DefaultId="DataItem2" />
+      </Values>
+    </Pie>
+  </Items>
+  <ColorScheme>
+    <Entry DataSource="sqlDataSource1" DataMember="交易额占比" Color="-14152021">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="乌鸡" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易额占比" Color="-5429677">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="牛肉" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易额占比" Color="-7987513">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="羊肉" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易额占比" Color="-4545519">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="猪肉" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+  </ColorScheme>
+  <LayoutTree>
+    <LayoutGroup Weight="100">
+      <LayoutItem DashboardItem="pieDashboardItem1" Weight="100" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

@@ -1,0 +1,48 @@
+@{
+    var treeList = Html.DevExpress().TreeList(settings =>
+    {
+        settings.Name = "PcategoryTreeList";
+        settings.CallbackRouteValues = new { Controller = "Manage", Action = "PcategoryTreeListPartial" };
+
+        settings.SettingsEditing.AddNewNodeRouteValues = new { Controller = "Manage", Action = "PcategoryTreeListPartialAddNew" };
+        settings.SettingsEditing.UpdateNodeRouteValues = new { Controller = "Manage", Action = "PcategoryTreeListPartialUpdate" };
+        settings.SettingsEditing.DeleteNodeRouteValues = new { Controller = "Manage", Action = "PcategoryTreeListPartialDelete" };
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.NewButton.Visible = false;
+        settings.CommandColumn.DeleteButton.Visible = true;
+        settings.CommandColumn.EditButton.Visible = true;
+        settings.CommandColumn.VisibleIndex = 10;
+        settings.SettingsBehavior.AllowFocusedNode = true;//点击加自带颜色
+        settings.SettingsBehavior.ExpandCollapseAction = TreeListExpandCollapseAction.NodeDblClick;//展开点击节点字符
+
+        settings.Width = Unit.Pixel(50);
+
+        settings.KeyFieldName = "pdCatetoryID";
+        settings.ParentFieldName = "ParentCatgoryID";
+        settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "PdCategoryName";
+        }
+        );
+            settings.Columns.Add(
+        column =>
+        {
+            column.FieldName = "ParentCatgoryID";
+        }
+         );
+
+        settings.ClientSideEvents.SelectionChanged = "function(s,e){OnClick(s,e);}";//复选框点击事件
+        settings.SettingsPager.Visible = false;
+        settings.SettingsSelection.Enabled = true;
+        settings.SettingsBehavior.AutoExpandAllNodes = true;//自动展开节点
+    });
+    if (ViewData["EditError"] != null)
+    {
+        treeList.SetEditErrorText((string)ViewData["EditError"]);
+
+    }
+}
+
+@treeList.Bind(Model).GetHtml()

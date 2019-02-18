@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard>
+  <Title Text="交易费分析" />
+  <DataSources>
+    <SqlDataSource Name="SQL Data Source" ComponentName="sqlDataSource1">
+      <Connection Name="DefaultConnection" FromAppConfig="true" />
+      <Query Type="SelectQuery" Name="交易费分析">
+        <Parameter Name="SJ1" Type="DevExpress.DataAccess.Expression">(System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.SJ1])</Parameter>
+        <Parameter Name="SJ2" Type="DevExpress.DataAccess.Expression">(System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)([Parameters.SJ2])</Parameter>
+        <Tables>
+          <Table Name="T_Product" />
+          <Table Name="T_ProductCategory" />
+          <Table Name="T_ProductTradeDaySummary" />
+          <Relation Type="Inner" Parent="T_Product" Nested="T_ProductCategory">
+            <KeyColumn Parent="pdCatetoryID" Nested="pdCatetoryID" />
+          </Relation>
+          <Relation Type="Inner" Parent="T_ProductTradeDaySummary" Nested="T_Product">
+            <KeyColumn Parent="ProductID" Nested="ProductID" />
+          </Relation>
+        </Tables>
+        <Columns>
+          <Column Table="T_Product" Name="ProductName" />
+          <Column Table="T_ProductCategory" Name="PdCategoryName" />
+          <Column Table="T_ProductTradeDaySummary" Name="MinPrice" Aggregate="Min" Alias="MinPrice_Min" />
+          <Column Table="T_ProductTradeDaySummary" Name="MaxPrice" Aggregate="Max" Alias="MaxPrice_Max" />
+          <Column Table="T_ProductTradeDaySummary" Name="avgPrice" Aggregate="Avg" Alias="avgPrice_Avg" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeAmount" Aggregate="Sum" Alias="TradeAmount_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeMoney" Aggregate="Sum" Alias="TradeMoney_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeFee" Aggregate="Sum" Alias="TradeFee_Sum" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeDate" />
+        </Columns>
+        <Grouping>
+          <Column Table="T_Product" Name="ProductName" />
+          <Column Table="T_ProductCategory" Name="PdCategoryName" />
+          <Column Table="T_ProductTradeDaySummary" Name="TradeDate" />
+        </Grouping>
+        <Filter>[T_ProductTradeDaySummary.TradeDate] &gt;= ?SJ1 And [T_ProductTradeDaySummary.TradeDate] &lt;= ?SJ2</Filter>
+      </Query>
+      <ConnectionOptions CloseConnection="true" />
+    </SqlDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="SJ1" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Value="2018-01-01T00:00:00" />
+    <Parameter Name="SJ2" Type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  </Parameters>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="Grid 1" ShowCaption="false" DataSource="sqlDataSource1" DataMember="交易费分析">
+      <InteractivityOptions MasterFilterMode="Single" />
+      <DataItems>
+        <Dimension DataMember="PdCategoryName" DefaultId="DataItem0" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="类别名称">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <Grid ComponentName="gridDashboardItem2" Name="Grid 2" ShowCaption="false" DataSource="sqlDataSource1" DataMember="交易费分析">
+      <DataItems>
+        <Dimension DataMember="PdCategoryName" DefaultId="DataItem0" />
+        <Dimension DataMember="ProductName" DefaultId="DataItem1" />
+        <Measure DataMember="MaxPrice_Max" DefaultId="DataItem2" />
+        <Measure DataMember="MinPrice_Min" DefaultId="DataItem3" />
+        <Measure DataMember="avgPrice_Avg" DefaultId="DataItem4" />
+        <Measure DataMember="TradeAmount_Sum" DefaultId="DataItem5" />
+        <Measure DataMember="TradeMoney_Sum" DefaultId="DataItem6" />
+        <Dimension DataMember="TradeDate" DateTimeGroupInterval="None" TopNMeasure="DataItem2" DefaultId="DataItem8" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="商品类别">
+          <Dimension DefaultId="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Name="商品名称">
+          <Dimension DefaultId="DataItem1" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="最高价">
+          <Measure DefaultId="DataItem2" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="最低价">
+          <Measure DefaultId="DataItem3" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="平均价">
+          <Measure DefaultId="DataItem4" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="成交量">
+          <Measure DefaultId="DataItem5" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="成交额">
+          <Measure DefaultId="DataItem6" />
+        </GridMeasureColumn>
+        <GridDimensionColumn Name="日期">
+          <Dimension DefaultId="DataItem8" />
+        </GridDimensionColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <Chart ComponentName="chartDashboardItem1" Name="Chart 1" ShowCaption="false" DataSource="sqlDataSource1" DataMember="交易费分析">
+      <DataItems>
+        <Measure DataMember="TradeFee_Sum" DefaultId="DataItem0" />
+        <Dimension DataMember="ProductName" DefaultId="DataItem1" />
+        <Dimension DataMember="ProductName" DefaultId="DataItem2" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension DefaultId="DataItem2" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument DefaultId="DataItem1" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <Series>
+            <Simple Name="交易费">
+              <Value DefaultId="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+    </Chart>
+  </Items>
+  <ColorScheme>
+    <Entry DataSource="sqlDataSource1" DataMember="交易费分析" Color="-6941376">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="牛肉" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易费分析" Color="-13213487">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="羊肉" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易费分析" Color="-3720086">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="肉鸡" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易费分析" Color="-10214516">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="猪肉" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易费分析" Color="-9490819">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="乌鸡" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易费分析" Color="-13131592">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="白条鸡" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+    <Entry DataSource="sqlDataSource1" DataMember="交易费分析" Color="-1728457">
+      <DimensionKeys>
+        <DimensionKey>
+          <Definition DataMember="ProductName" />
+          <Value Type="System.String" Value="小鸡" />
+        </DimensionKey>
+      </DimensionKeys>
+    </Entry>
+  </ColorScheme>
+  <LayoutTree>
+    <LayoutGroup Weight="100">
+      <LayoutGroup Orientation="Vertical" Weight="38.711879581444784">
+        <LayoutGroup Weight="38.711879581444784">
+          <LayoutItem DashboardItem="gridDashboardItem1" Weight="28.299008390541569" />
+          <LayoutGroup Orientation="Vertical" Weight="171.70099160945841">
+            <LayoutItem DashboardItem="gridDashboardItem2" Weight="89.301634472511154" />
+            <LayoutItem DashboardItem="chartDashboardItem1" Weight="110.69836552748885" />
+          </LayoutGroup>
+        </LayoutGroup>
+      </LayoutGroup>
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

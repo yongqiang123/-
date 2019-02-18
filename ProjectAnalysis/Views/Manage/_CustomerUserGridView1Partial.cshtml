@@ -1,0 +1,81 @@
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "CustomerUserGridView";
+        settings.CallbackRouteValues = new { Controller = "Manage", Action = "CustomerUserGridView1Partial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Manage", Action = "CustomerUserGridView1PartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Manage", Action = "CustomerUserGridView1PartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Manage", Action = "CustomerUserGridView1PartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "CustomerUserID";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+         settings.CommandColumn.VisibleIndex = 10;
+
+        settings.Columns.Add("CustomerUserName");
+        //settings.Columns.Add("CustomerID");
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CustomerID";
+            // column.Caption = "Ë÷Ö¤Ãû³Æ";
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "CustomerName";
+                p.ValueField = "CustomerID";
+                p.ValueType = typeof(int);
+                p.DataSource = ViewData["Customer"];
+            });
+        });
+
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CustomerDepID";
+
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "CustomerDepName";
+                p.ValueField = "CustomerDepID";
+                p.ValueType = typeof(int);
+                p.DataSource = ViewData["T_CustomerDepartment"];
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "UserTypeID";
+
+            column.EditorProperties().ComboBox(p =>
+            {
+                p.TextField = "UserType";
+                p.ValueField = "UserTypeID";
+                p.ValueType = typeof(int);
+                p.DataSource = ViewData["T_CustomerUserType"];
+            });
+        });
+
+        settings.Columns.Add("UserPhone");
+        settings.Columns.Add("UserAddress");
+        settings.Columns.Add("UserPwd");
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

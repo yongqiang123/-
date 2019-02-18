@@ -1,0 +1,40 @@
+@{
+	var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "UserTypeGridView";
+        settings.CallbackRouteValues = new { Controller = "Manage", Action = "UserTypeGridViewPartial" };
+
+				settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Manage", Action = "UserTypeGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Manage", Action = "UserTypeGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Manage", Action = "UserTypeGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+		settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+		settings.KeyFieldName = "UserTypeID";
+
+		settings.SettingsPager.Visible = true;
+		settings.Settings.ShowGroupPanel = false;
+		settings.Settings.ShowFilterRow = true;
+		settings.SettingsBehavior.AllowSelectByRowClick = false;
+
+		settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+		settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+		settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+		settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+		settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+         settings.CommandColumn.VisibleIndex = 14;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+
+				//settings.Columns.Add("UserTypeID");
+				settings.Columns.Add("UserType","ְλ");
+				//settings.Columns.Add("T_CustomerUser");
+			});
+		if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

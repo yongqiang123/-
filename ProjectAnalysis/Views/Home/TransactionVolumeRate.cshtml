@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "TransactionVolumeRate-交易额占比";
+}
+
+<link href="~/Content/search.css" rel="stylesheet" />
+<table class="tab">
+    <tr>
+        <td>
+            <div class="st">开始日期:</div>
+        </td>
+        <td>
+            <select id="STyear">
+                @for (int i = DateTime.Now.Year; i >= ViewBag.minyear; i--)
+                {
+                    <option>@i</option>
+                }
+            </select>
+            <span class="span">年</span>
+            <select id="STmonth">
+                <option>@DateTime.Today.Month</option>
+                @for (int j = 1; j <= 12; j++)
+                {
+                    <option>@j</option>
+                }
+            </select>
+            <span class="span">
+                月&emsp;
+            </span>
+        </td>
+
+        <td><div class="st">结束日期:</div></td>
+        <td>
+
+            <select id="ETyear">
+                @for (int k = DateTime.Now.Year; k >= ViewBag.minyear; k--)
+                {
+                    <option>@k</option>
+                }
+            </select>
+            <span class="span">年</span>
+            <select id="ETmonth">
+                <option>@DateTime.Today.Month</option>
+                @for (int p = 1; p <= 12; p++)
+                {
+                    <option>@p</option>
+                }
+            </select>
+            <span class="span">
+                月
+            </span>
+        </td>
+        <td>
+            @Html.DevExpress().Button(m =>
+            {
+                m.Name = "btn";
+                m.Text = "查询";
+                m.ClientSideEvents.Click = "function(){setParameterValues();}";
+            }).GetHtml()
+        </td>
+    </tr>
+</table>
+
+@Html.DevExpress().Dashboard(settings =>
+{
+    settings.Name = "dashboard5";
+    settings.WorkingMode = DevExpress.DashboardWeb.WorkingMode.ViewerOnly;
+    settings.InitialDashboardId = "dashboard5";
+   settings.ClientSideEvents.DashboardEndUpdate = "function() { setParameterValues(); }";
+}).GetHtml()
+
+<script>
+    function setParameterValues() {
+         var parameters = dashboard5.GetParameters();
+         var sj1_year = $("#STyear").val();
+                var sj1_month = $("#STmonth").val();
+                var sj2_year = $("#ETyear").val();
+                var sj2_month =  $("#ETmonth").val();
+               
+                var SJ1 = parameters.GetParameterByName("SJ1"),
+                    SJ2 = parameters.GetParameterByName("SJ2");
+                if (sj1_month<10)
+                {
+                    sj1_month = "0" + sj1_month + "";
+                }
+                if (sj2_month<10)
+                {
+                    sj1_month = "0" + sj2_month + "";
+                }
+                SJ1.SetValue("" + sj1_year + "-" + sj1_month + "");
+            SJ2.SetValue("" + sj2_year + "-" + sj2_month + "");
+
+    }
+</script>
